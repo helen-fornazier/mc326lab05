@@ -1,6 +1,8 @@
 #ifndef LIB_TREE
 #define LIB_TREE
 
+#ifndef STRUCT_CAMPO
+#define STRUCT_CAMPO
 typedef struct campos {
        int chave;
        char *nome;
@@ -9,6 +11,7 @@ typedef struct campos {
        char tipo;
        char obrigatorio;
 }campos;
+#endif  /*STRUCT_CAMPO*/
 
 typedef struct noh{
         /*eh uma dupla de uma chave e o endereco do registro referente à chave no arq de entrada*/
