@@ -7,15 +7,11 @@
 #include "save_arq.h"
 #include "read_arq.h"
 
-void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos){
+void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos,int ord){
      /*no caso de construir a arvore*/
     noh busc_noh; 
     noh *reg;
     char *reg_completo = malloc(sizeof(char)*ftam(campo,n_campos));
-    
-    /*abertura abertura */
-    
-    
     fgetc(entrada);
     while(! eof(entrada)){
             fseek(entrada,-1,SEEK_CUR);
@@ -34,6 +30,8 @@ void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos
          
          fgetc(entrada);
          }         
+}
+void adiciona_na_tree(FILE *destino,int end_noh, noh *reg){
 }
 pagina le_pag(FILE *destino,int endereco){
        pagina pag;
@@ -64,34 +62,31 @@ int ftam(campos *campo,int n_campos){
     return tam;
 }
 noh busca_noh(FILE *destino,noh *reg){
-   
+    pagina pag = le_pag_seq(destino);
+    
 }
 noh *le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos){
     noh *novos_dados;
-//    int tam = ftam(campos *campo,int n_campos);
     int tam = ftam(campo,n_campos);
-//    int ind = ret_indice_chave(campos *campo,int n_campos);
     int ind = ret_indice_chave(campo,n_campos);
     int chave_tam = campo[ind-1].pf - campo[ind-1].pi + 1;
     char *chave = (char*) malloc (sizeof(char)*(chave_tam+1));
     /*gravação do valor do inicio do registro na variável a ser retornada*/
-//    novos_dados.end_noh = ftell (entrada);
     novos_dados->end_noh = ftell (entrada);
     /*gravação do registro completo em reg_completo*/
-//    fread (reg_completo,sizeof(char),tam,fileptr);
     fread (reg_completo,sizeof(char),tam,entrada);
     reg_completo[tam] = '\0';
     /*reposicionamento do ponteiro de arquivo no inicio do registro*/
     fseek (entrada, -tam, SEEK_CUR);
     fseek (entrada, campo[ind-1].pi, SEEK_CUR);
     /*gravação do valor da chave na variável a ser retornada*/
-//  fread (chave,sizeof(char),chave_tam,fileptr);
     fread (chave,sizeof(char),chave_tam,entrada);
     chave[chave_tam] = '\0';
-//  novos_dados.valor = atoi (chave);
     novos_dados->valor = atoi (chave);
     return novos_dados;
 }
 
 void grava_reg_desp(FILE *desprezados,char *reg_completo){
-     
+     int tam = strlen(reg_completo);
+     fwrite(reg_completo,1,tam,desprezados);
+}

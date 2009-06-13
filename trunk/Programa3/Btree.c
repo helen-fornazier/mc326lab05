@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     campos *campo;
     int ind_chave;
     noh *busc_noh;
+    int ord;                  /*ordem da arvore*/
         
     /*Arquivo de erros*/
     fileptr = Fopen(ARQUIVO_DE_MENSAGENS,"r", vazio);
@@ -42,6 +43,9 @@ int main(int argc, char *argv[])
     campo = vet_campos(fileptr,n_campos);   
     Fclose(fileptr, mensagens);
   
+    /*ord recebe o valor da ordem da arvore dada pelo usuario*/
+    ord = atoi(argv[1]);
+    
     /*ABERTURA DOS ARQUIVOS*/
     /*abertura do arquivo de entrada*/
     entrada = Fopen(argv[2],"r", mensagens);
@@ -58,7 +62,7 @@ int main(int argc, char *argv[])
     /*INICIO*/    
     /*gerar arvore*/
     ind_chave = ret_indice_chave(campo,n_campos);  
-    pre_tree(entrada,destino,desprezados,ind_chave,campo,n_campos);
+    pre_tree(entrada,destino,desprezados,ind_chave,campo,n_campos,ord);
     sucesso (mensagens);
     
     /*Libera memoria e fecha arquivos*/
