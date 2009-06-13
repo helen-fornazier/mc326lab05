@@ -1,5 +1,6 @@
-#ifndef STR_CAMPOS
-#define STR_CAMPOS
+#ifndef LIB_TREE
+#define LIB_TREE
+
 typedef struct campos {
        int chave;
        char *nome;
@@ -8,7 +9,6 @@ typedef struct campos {
        char tipo;
        char obrigatorio;
 }campos;
-#endif /*fim da redefinicao de STR_CAMPOS*/
 
 typedef struct noh{
         /*eh uma dupla de uma chave e o endereco do registro referente à chave no arq de entrada*/
@@ -64,3 +64,5 @@ void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos
 /*
   eh dentro desta funcao que chamaremos a busca pelo noh e, depois a adiciona_na_tree
 */
+
+#endif   /*LIB_TREE*/
