@@ -63,7 +63,7 @@ pagina le_pag_seq(FILE *destino);
 /*
   le o proximo registro do arquivo DESTINO
 */
-void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos);
+void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos,int ord);
 /*
   eh dentro desta funcao que chamaremos a busca pelo noh e, depois a adiciona_na_tree
 */
