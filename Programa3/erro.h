@@ -1,3 +1,7 @@
+﻿#ifndef LIB_ERRO
+#define LIB_ERRO
+
+
 #define ARQUIVO_DE_MENSAGENS "config_mensagens.txt"
 #define NUMERO_DE_MENSAGENS 12
 #define SEPARADOR_MENSAGEM "\n"
@@ -73,3 +77,6 @@ void removido_registro (char **mensagens);
   caso registro esteja logicamente removido (indicando que, em algum momento, ele estava ativo)
 */
 void sucesso (char **mensagens);
+
+
+#endif     /*LIB_ERRO*/

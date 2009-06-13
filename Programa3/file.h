@@ -1,5 +1,5 @@
-#ifndef STR_CAMPOS
-#define STR_CAMPOS
+#ifndef LIB_FILE
+#define LIB_FILE
 typedef struct campos {
        int chave;
        char *nome;
@@ -41,4 +41,5 @@ int tam_arq(FILE *fd);
 /*
   Funcao que retorna o tamanho do arquivo
 */
-#endif /*fim da redefinicao de STR_CAMPOS*/
+
+#endif /*LIB_FILE*/

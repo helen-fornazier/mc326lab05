@@ -1,3 +1,6 @@
+﻿#ifndef LIB_READ_ARQ
+#define LIB_READ_ARQ
+
 #define FIM_DE_REGISTRO '#'
 #define TAM_MAX_NOME 50
 #define ARQ_REM '1'
@@ -73,3 +76,5 @@ void keys(FILE *fileptr, FILE *destino, int ind_chave, campos *campo);
 /*
   Gera um arquivo com as chaves e os respectivos enderecos
 */
+
+#endif         /*LIB_READ_ARQ*/
