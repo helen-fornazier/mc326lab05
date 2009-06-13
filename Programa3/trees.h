@@ -23,12 +23,12 @@ typedef struct pagina{
         int f[10];
 }pagina;
 
-void adiciona_na_tree(FILE *destino,int end_noh, noh reg);
+void adiciona_na_tree(FILE *destino,int end_noh, noh *reg);
 /*
   adiciona no noh de endereco busc_noh.endereco o conjunto reg (chave+end do 
   registro no arq de entrada).
 */
-noh busca_noh(FILE *destino,noh reg);
+noh busca_noh(FILE *destino,noh *reg);
 /*
   verifica se reg.valor esta na tree.
   busca noh na arvore, se não encontrar retorna 0,endereco do noh; se encontrar 
@@ -47,7 +47,7 @@ void grava_reg_desp(FILE *desprezados,char *reg_completo);
 /*
   grava reg_completo no arquivo de desprezados
 */
-noh le_chave(FILE *entrada,char *reg_completo,campos *campo,int n_campos);
+noh *le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos);
 /*
   le no arquivo de entrada o próximo registro, retirando sua chave e endereco.
   Alem disso, copia o registro na integra para o &reg_completo
