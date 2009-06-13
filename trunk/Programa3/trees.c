@@ -10,18 +10,19 @@
 void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos,int ord){
      /*no caso de construir a arvore*/
     noh busc_noh; 
-    noh *reg;
+    noh reg;
+    int raiz=0;               /*possui o endereco da pagina raiz*/
     char *reg_completo = malloc(sizeof(char)*ftam(campo,n_campos));
     fgetc(entrada);
-    while(! eof(entrada)){
-            fseek(entrada,-1,SEEK_CUR);
-            /*MIRIA E RUBENS: le_chave*/  
+    while(!feof(entrada)){
+            fseek(entrada,-1,SEEK_CUR); 
             reg = le_chave(entrada,reg_completo,campo,n_campos); 
+            printf("reg.valor = %d adlfkjslkj\n",reg.valor);
             /*MIRIA E RUBENS: busca_noh*/  
-            busc_noh = busca_noh(destino,reg); 
-    
+            busc_noh = busca_noh(destino,reg,raiz,ord); 
+            
             /*HELEN E PEDRO: adiciona_na_tree*/
-            if(busc_noh.valor == 0) adiciona_na_tree(destino,busc_noh.end_noh,reg);
+            if(busc_noh.valor == 0) adiciona_na_tree(destino,busc_noh.end_noh,reg,&raiz);
                 
                  /*MIRIA E RUBENS: grava_reg_desp*/            
             else grava_reg_desp(desprezados,reg_completo);
@@ -31,20 +32,13 @@ void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos
          fgetc(entrada);
          }         
 }
-void adiciona_na_tree(FILE *destino,int end_noh, noh *reg){
+void adiciona_na_tree(FILE *destino,int end_noh, noh reg,int *raiz){
+     /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 }
 pagina le_pag(FILE *destino,int endereco){
        pagina pag;
        int i;
        fseek(destino,endereco,SEEK_SET);
-       fscanf(destino,"%d", &pag.ap_pai);
-       for(i=0;i<9;i++) fscanf(destino,"%d %d", &pag.n[i].valor,&pag.n[i].end_noh);
-       for(i=0;i<10;i++) fscanf(destino,"%d", &pag.f[i]);       
-       return pag;
-}
-pagina le_pag_seq(FILE *destino){
-       pagina pag;
-       int i;
        fscanf(destino,"%d", &pag.ap_pai);
        for(i=0;i<9;i++) fscanf(destino,"%d %d", &pag.n[i].valor,&pag.n[i].end_noh);
        for(i=0;i<10;i++) fscanf(destino,"%d", &pag.f[i]);       
@@ -61,18 +55,36 @@ int ftam(campos *campo,int n_campos){
     int tam = campo[n_campos-1].pf;
     return tam;
 }
-noh busca_noh(FILE *destino,noh *reg){
-    pagina pag = le_pag_seq(destino);
-    
+noh busca_noh(FILE *destino,noh reg,int end,int ord){
+    noh res; res.valor = 0; res.end_noh = 0;  /*retorna o resultado da busca na pagina*/
+    char c;
+    if(c = fgetc(destino) == EOF) return res;
+    pagina pag = le_pag(destino,end);
+    res = busca_na_pag(pag,reg,ord);
+    if(res.valor == 1) return res;
+    if(res.valor == 0 && res.end_noh == -1)
+      {res.end_noh = end; return res;}
+    busca_noh(destino,reg,res.end_noh,ord);  
 }
-noh *le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos){
-    noh *novos_dados;
+noh busca_na_pag(pagina pag,noh reg,int ord){
+    int i;
+    noh ret;
+    for(i=0;i<ord-1;i++) {
+       if(reg.valor == pag.n[i].valor) 
+         {ret.valor = 1; ret.end_noh = pag.n[i].end_noh; return ret;}
+       if(reg.valor < pag.n[i].valor) 
+         {ret.valor = 0; ret.end_noh = pag.f[i]; return ret;}
+    }
+    ret.valor = 0; ret.end_noh = pag.f[ord]; return ret; 
+}
+noh le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos){
+    noh novos_dados;
     int tam = ftam(campo,n_campos);
     int ind = ret_indice_chave(campo,n_campos);
     int chave_tam = campo[ind-1].pf - campo[ind-1].pi + 1;
     char *chave = (char*) malloc (sizeof(char)*(chave_tam+1));
     /*gravação do valor do inicio do registro na variável a ser retornada*/
-    novos_dados->end_noh = ftell (entrada);
+    novos_dados.end_noh = ftell (entrada);
     /*gravação do registro completo em reg_completo*/
     fread (reg_completo,sizeof(char),tam,entrada);
     reg_completo[tam] = '\0';
@@ -82,7 +94,7 @@ noh *le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos){
     /*gravação do valor da chave na variável a ser retornada*/
     fread (chave,sizeof(char),chave_tam,entrada);
     chave[chave_tam] = '\0';
-    novos_dados->valor = atoi (chave);
+    novos_dados.valor = atoi (chave);
     return novos_dados;
 }
 

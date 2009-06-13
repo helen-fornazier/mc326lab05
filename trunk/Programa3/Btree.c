@@ -51,20 +51,27 @@ int main(int argc, char *argv[])
     entrada = Fopen(argv[2],"r", mensagens);
         
     /*abertura do arquivo da arvore*/
-    destino = Fopen(argv[3],"r", mensagens);
+    destino = Fopen(argv[3],"w", mensagens);
     
     /*abertura do arquivo de desprezados*/
-    desprezados = Fopen(argv[4],"r", mensagens);
+    desprezados = Fopen(argv[4],"w", mensagens);
 
     /*abertura do arquivo de descricao da arvore*/
-    desc_tree = Fopen(argv[5],"r", mensagens);
+    desc_tree = Fopen(argv[5],"w", mensagens);
         
     /*INICIO*/    
     /*gerar arvore*/
     ind_chave = ret_indice_chave(campo,n_campos);  
-    pre_tree(entrada,destino,desprezados,ind_chave,campo,n_campos,ord);
-    sucesso (mensagens);
+    //pre_tree(entrada,destino,desprezados,ind_chave,campo,n_campos,ord);
     
+    /*AREA DE TESTE DAS SUBFUNCOES*/
+    char *reg_completo;
+    noh reg = le_chave(entrada,reg_completo,campo,n_campos);
+    printf("reg.valor = %d, reg.end_noh = %d\n",reg.valor,reg.end_noh); 
+    /*FIM DA AREA DE TESTES DAS SUBFUNCOES*/
+    
+    sucesso (mensagens);
+ 
     /*Libera memoria e fecha arquivos*/
     Fclose(entrada,mensagens);
     Fclose(destino,mensagens);
