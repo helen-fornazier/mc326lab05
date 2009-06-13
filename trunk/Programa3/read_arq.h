@@ -1,4 +1,4 @@
-﻿#ifndef LIB_READ_ARQ
+#ifndef LIB_READ_ARQ
 #define LIB_READ_ARQ
 
 #define FIM_DE_REGISTRO '#'

@@ -1,4 +1,4 @@
-﻿#ifndef LIB_ERRO
+#ifndef LIB_ERRO
 #define LIB_ERRO
 
 
