@@ -26,12 +26,20 @@ typedef struct pagina{
         int f[10];
 }pagina;
 
-void adiciona_na_tree(FILE *destino,int end_noh, noh *reg);
+void adiciona_na_tree(FILE *destino,int end_noh, noh reg,int *raiz);
 /*
   adiciona no noh de endereco busc_noh.endereco o conjunto reg (chave+end do 
   registro no arq de entrada).
+  Deve alterar o valor da variavel raiz, caso seja criado uma nova raiz.
+  Deve-se colocar -1 para os ponteiros das paginas q nao tenham filhos
 */
-noh busca_noh(FILE *destino,noh *reg);
+noh busca_na_pag(pagina pag,noh reg,int ord);
+/*
+  Busca na pagina o valor de reg.valor. 
+  Se encontrar, retorna 1 / end_noh do noh com chave=reg.valor.
+  Se nao encontrar, retorna 0 / endereco do filho onde buscar
+*/
+noh busca_noh(FILE *destino,noh reg,int end,int ord);
 /*
   verifica se reg.valor esta na tree.
   busca noh na arvore, se não encontrar retorna 0,endereco do noh; se encontrar 
@@ -50,7 +58,7 @@ void grava_reg_desp(FILE *desprezados,char *reg_completo);
 /*
   grava reg_completo no arquivo de desprezados
 */
-noh *le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos);
+noh le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos);
 /*
   le no arquivo de entrada o próximo registro, retirando sua chave e endereco.
   Alem disso, copia o registro na integra para o &reg_completo
@@ -58,10 +66,6 @@ noh *le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos);
 pagina le_pag(FILE *destino,int endereco);
 /*
   le, do endereco "endereco" uma pagina e a retorna
-*/
-pagina le_pag_seq(FILE *destino);
-/*
-  le o proximo registro do arquivo DESTINO
 */
 void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos,int ord);
 /*
