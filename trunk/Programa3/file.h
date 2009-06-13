@@ -1,5 +1,8 @@
 #ifndef LIB_FILEFILE
 #define LIB_FILEFILE
+
+#ifndef STRUCT_CAMPO
+#define STRUCT_CAMPO
 typedef struct campos {
        int chave;
        char *nome;
@@ -9,6 +12,7 @@ typedef struct campos {
        char obrigatorio;
 }campos;
 
+#endif /*STRUCT_CAMPO*/
 
 int count_caractere(char *texto, char c);
 /*
