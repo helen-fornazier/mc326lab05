@@ -1,5 +1,5 @@
-#ifndef LIB_FILE
-#define LIB_FILE
+#ifndef LIB_FILEFILE
+#define LIB_FILEFILE
 typedef struct campos {
        int chave;
        char *nome;
