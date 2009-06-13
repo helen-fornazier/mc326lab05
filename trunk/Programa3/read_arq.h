@@ -73,4 +73,3 @@ void keys(FILE *fileptr, FILE *destino, int ind_chave, campos *campo);
 /*
   Gera um arquivo com as chaves e os respectivos enderecos
 */
-noh *le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos);

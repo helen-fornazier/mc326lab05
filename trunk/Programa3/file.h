@@ -8,7 +8,7 @@ typedef struct campos {
        char tipo;
        char obrigatorio;
 }campos;
-#endif /*fim da redefinicao de STR_CAMPOS*/
+
 
 int count_caractere(char *texto, char c);
 /*
@@ -41,3 +41,4 @@ int tam_arq(FILE *fd);
 /*
   Funcao que retorna o tamanho do arquivo
 */
+#endif /*fim da redefinicao de STR_CAMPOS*/

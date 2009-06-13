@@ -10,7 +10,7 @@
 void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos){
      /*no caso de construir a arvore*/
     noh busc_noh; 
-    noh reg;
+    noh *reg;
     char *reg_completo = malloc(sizeof(char)*ftam(campo,n_campos));
     fgetc(entrada);
     while(! eof(entrada)){
@@ -24,7 +24,7 @@ void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos
             if(busc_noh.valor == 0) adiciona_na_tree(destino,busc_noh.end_noh,reg);
                 
                  /*MIRIA E RUBENS: grava_reg_desp*/            
-            else (grava_reg_desp(desprezados,reg_completo));
+            else grava_reg_desp(desprezados,reg_completo);
                   /*grava o registro reg_completo no arquivo de desprezados*/
          
          
@@ -59,13 +59,12 @@ int ftam(campos *campo,int n_campos){
     int tam = campo[n_campos-1].pf;
     return tam;
 }
-noh busca_noh(FILE *destino,noh reg){
+noh busca_noh(FILE *destino,noh *reg){
    
 }
-
 noh *le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos){
     noh *novos_dados;
-    int tam = ftam(campos *campo,int n_campos);
+    int tam = ftam(campo,n_campos);
     int ind = ret_indice_chave(campos *campo,int n_campos);
     int chave_tam = campo[ind-1].pf - campo[ind-1].pi + 1;
     char *chave = (char*) malloc (sizeof(char)*(chave_tam+1));

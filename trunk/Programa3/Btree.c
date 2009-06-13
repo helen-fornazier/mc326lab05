@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -7,9 +7,7 @@
 #include "trees.h"
 #include "read_arq.h"
 #include "save_arq.h"
-/*comentsoiduofisuodiufoisuoid*/
 
-/*blablablablabla -  coment helen*/
 int main(int argc, char *argv[])
 {
     char *texto_mensagens;    /*texto extraído do arquivo de configuração de mensagens*/  
