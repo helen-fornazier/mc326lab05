@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -71,5 +71,4 @@ int main(int argc, char *argv[])
     system("pause");
     return 0;
 }
-
-/*comentario de teste*/
+/*Teste Helen Aqui*/
