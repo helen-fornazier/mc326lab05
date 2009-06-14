@@ -21,6 +21,9 @@ int main(int argc, char *argv[])
     int op = 1;
     int ord;                  /*ordem da arvore*/
     char *reg_completo;       /*alocado dinamicamente dentro da funcao le_chave()*/
+    noh reg;
+    int buscar;
+    noh achou;
         
     /*Arquivo de erros*/
     fileptr = Fopen(ARQUIVO_DE_MENSAGENS,"r", vazio);
@@ -53,10 +56,10 @@ int main(int argc, char *argv[])
     entrada = Fopen(argv[2],"r", mensagens);
         
     /*abertura do arquivo da arvore*/
-    destino = Fopen(argv[3],"w", mensagens);
+    destino = Fopen(argv[3],"w+", mensagens);
     
     /*abertura do arquivo de desprezados*/
-    desprezados = Fopen(argv[4],"w", mensagens);
+    desprezados = Fopen(argv[4],"w+", mensagens);
 
     /*abertura do arquivo de descricao da arvore*/
     desc_tree = Fopen(argv[5],"w", mensagens);
@@ -72,14 +75,17 @@ int main(int argc, char *argv[])
                  case 0: 
                          break;
                  case 1:
-                         ind_chave = ret_indice_chave(campo,n_campos);  
-                         //pre_tree(entrada,destino,desprezados,ind_chave,campo,n_campos,ord);
-                         noh reg = le_chave(entrada,reg_completo,campo,n_campos);
-                         printf("reg.valor = %d, reg.end_noh = %d\n",reg.valor,reg.end_noh); 
+                         ind_chave = ret_indice_chave(campo,n_campos);
+                         pre_tree(entrada,destino,desprezados,ind_chave,campo,n_campos,ord);
                          sucesso (mensagens);
                          free (reg_completo);
                          break;
                  case 2:
+                         reg.end_noh = 0;
+                         printf ("Digite chave de busca (RA): ");
+                         scanf ("%d", &reg.valor);
+                         achou = busca_noh(destino,reg,0,ord);
+                         printf("reg.valor = %d, reg.end_noh = %d\n", achou.valor, achou.end_noh);
                           /*busca por chave = aplicar função utilizada dentro da construcao da arvore*/
                           break;
                  case 3:
