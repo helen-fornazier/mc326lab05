@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-    char *texto_mensagens;    /*texto extraÃ­do do arquivo de configuraÃ§Ã£o de mensagens*/  
+    char *texto_mensagens;    /*texto extraído do arquivo de configuração de mensagens*/  
     FILE *fileptr, *destino, *entrada, *desprezados, *desc_tree;
     char **vazio = NULL; 
     char **mensagens;         /*vetor de mensagens*/  
@@ -18,7 +18,9 @@ int main(int argc, char *argv[])
     campos *campo;
     int ind_chave;
     noh *busc_noh;
-    int op;
+    int op = 1;
+    int ord;                  /*ordem da arvore*/
+    char *reg_completo;       /*alocado dinamicamente dentro da funcao le_chave()*/
         
     /*Arquivo de erros*/
     fileptr = Fopen(ARQUIVO_DE_MENSAGENS,"r", vazio);
@@ -43,15 +45,18 @@ int main(int argc, char *argv[])
     campo = vet_campos(fileptr,n_campos);   
     Fclose(fileptr, mensagens);
   
+    /*ord recebe o valor da ordem da arvore dada pelo usuario*/
+    ord = atoi(argv[1]);
+    
     /*ABERTURA DOS ARQUIVOS*/
     /*abertura do arquivo de entrada*/
     entrada = Fopen(argv[2],"r", mensagens);
         
     /*abertura do arquivo da arvore*/
-    destino = Fopen(argv[3],"w+", mensagens);
+    destino = Fopen(argv[3],"w", mensagens);
     
     /*abertura do arquivo de desprezados*/
-    desprezados = Fopen(argv[4],"w+", mensagens);
+    desprezados = Fopen(argv[4],"w", mensagens);
 
     /*abertura do arquivo de descricao da arvore*/
     desc_tree = Fopen(argv[5],"w", mensagens);
@@ -68,9 +73,11 @@ int main(int argc, char *argv[])
                          break;
                  case 1:
                          ind_chave = ret_indice_chave(campo,n_campos);  
-                         pre_tree (entrada,destino,desprezados,ind_chave,campo,n_campos, 0);
+                         //pre_tree(entrada,destino,desprezados,ind_chave,campo,n_campos,ord);
+                         noh reg = le_chave(entrada,reg_completo,campo,n_campos);
+                         printf("reg.valor = %d, reg.end_noh = %d\n",reg.valor,reg.end_noh); 
                          sucesso (mensagens);
-                         
+                         free (reg_completo);
                          break;
                  case 2:
                           /*busca por chave = aplicar função utilizada dentro da construcao da arvore*/
@@ -78,9 +85,11 @@ int main(int argc, char *argv[])
                  case 3:
                           /*desenhar a arvore*/
                           break;
+                 default:
+                          break;
           }
     }
-    
+ 
     /*Libera memoria e fecha arquivos*/
     Fclose(entrada,mensagens);
     Fclose(destino,mensagens);
@@ -91,3 +100,4 @@ int main(int argc, char *argv[])
     system("pause");
     return 0;
 }
+    

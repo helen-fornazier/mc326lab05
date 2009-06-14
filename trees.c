@@ -81,20 +81,22 @@ noh le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos){
     noh novos_dados;
     int tam = ftam(campo,n_campos);
     int ind = ret_indice_chave(campo,n_campos);
-    int chave_tam = campo[ind-1].pf - campo[ind-1].pi + 1;
+    int chave_tam = campo[ind-1].pf - campo[ind-1].pi;
     char *chave = (char*) malloc (sizeof(char)*(chave_tam+1));
+    reg_completo = (char*)malloc((sizeof(char))*(tam + 1));
     /*gravação do valor do inicio do registro na variável a ser retornada*/
     novos_dados.end_noh = ftell (entrada);
+    /*gravação do valor da chave na variável a ser retornada*/
+    fseek (entrada, campo[ind-1].pi - 1, SEEK_CUR);
+    fread (chave,sizeof(char), chave_tam, entrada);
+    chave[chave_tam] = '\0';
+    novos_dados.valor = atoi (chave);
+    /*reposicionamento do ponteiro de arquivo no inicio do registro*/
+    fseek (entrada, -campo[ind-1].pf +1, SEEK_CUR);
     /*gravação do registro completo em reg_completo*/
     fread (reg_completo,sizeof(char),tam,entrada);
     reg_completo[tam] = '\0';
-    /*reposicionamento do ponteiro de arquivo no inicio do registro*/
-    fseek (entrada, -tam, SEEK_CUR);
-    fseek (entrada, campo[ind-1].pi, SEEK_CUR);
-    /*gravação do valor da chave na variável a ser retornada*/
-    fread (chave,sizeof(char),chave_tam,entrada);
-    chave[chave_tam] = '\0';
-    novos_dados.valor = atoi (chave);
+    free (chave);
     return novos_dados;
 }
 
