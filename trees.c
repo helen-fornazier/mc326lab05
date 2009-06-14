@@ -11,23 +11,23 @@ void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos
      /*no caso de construir a arvore*/
     noh busc_noh; 
     noh reg;
+    int i=0;
     int raiz=0;               /*possui o endereco da pagina raiz*/
     char *reg_completo = malloc(sizeof(char)*ftam(campo,n_campos));
     fgetc(entrada);
     while(!feof(entrada)){
             fseek(entrada,-1,SEEK_CUR); 
             reg = le_chave(entrada,reg_completo,campo,n_campos); 
-            printf("reg.valor = %d adlfkjslkj\n",reg.valor);
+            printf("reg.valor = %d, reg.end_noh = %d, contador = %d\n",reg.valor, reg.end_noh, ++i);
             /*MIRIA E RUBENS: busca_noh*/  
             busc_noh = busca_noh(destino,reg,raiz,ord); 
-            
+            printf("reg.valor = %d, reg.end_noh = %d\n", busc_noh.valor, busc_noh.end_noh);
             /*HELEN E PEDRO: adiciona_na_tree*/
             if(busc_noh.valor == 0) adiciona_na_tree(destino,busc_noh.end_noh,reg,&raiz);
                 
                  /*MIRIA E RUBENS: grava_reg_desp*/            
             else grava_reg_desp(desprezados,reg_completo);
                   /*grava o registro reg_completo no arquivo de desprezados*/
-         
          
          fgetc(entrada);
          }         
@@ -102,5 +102,6 @@ noh le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos){
 
 void grava_reg_desp(FILE *desprezados,char *reg_completo){
      int tam = strlen(reg_completo);
-     fwrite(reg_completo,1,tam,desprezados);
+     fseek (desprezados, 0, SEEK_END);
+     fwrite(reg_completo,sizeof(char),tam,desprezados);
 }
