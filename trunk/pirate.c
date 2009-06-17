@@ -166,13 +166,14 @@ void add_node(FILE *f, long int *root, noh reg, int ord, long int ad, long int a
 }
 
 /* insere um nó na arvore */
-void adiciona_na_tree(FILE *f, long int *root, noh reg, int ord){
+int adiciona_na_tree(FILE *f, long int *root, noh reg, int ord){
 	noh temp;
 
 	temp=busca_noh(f,reg,*add_root,ord);
-	if(temp.valor) return;
+	if(temp.valor) return 0;
 
 	add_node(f,*root,reg,ord,temp.end_noh,-1);
 
+	return 1;
 }
 
