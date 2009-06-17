@@ -7,7 +7,7 @@
 #include "save_arq.h"
 #include "read_arq.h"
 
-void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,long int ind_chave,campos *campo,int n_campos,int ord){
+void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos,int ord){
      /*no caso de construir a arvore*/
     noh busc_noh; 
     noh reg;
@@ -32,30 +32,71 @@ void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,long int ind_chave,c
          fgetc(entrada);
          }         
 }
-void adiciona_na_tree(FILE *destino,long int end_noh, noh reg,long int *raiz){
+void adiciona_na_tree(FILE *destino,int end_noh, noh reg,int *raiz){
      /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 }
-pagina le_pag(FILE *destino,int endereco){
-       pagina pag;
-       int i;
-       fseek(destino,endereco,SEEK_SET);
-       fscanf(destino,"%d", &pag.ap_pai);
-       for(i=0;i<9;i++) fscanf(destino,"%d %d", &pag.n[i].valor,&pag.n[i].end_noh);
-       for(i=0;i<10;i++) fscanf(destino,"%d", &pag.f[i]);       
-       return pag;
+
+noh new_node(){
+	noh node;
+	node.valor=-1;
+	node.end_noh=-1;
+	return node;
 }
-void escreve_pag(FILE *destino,int endereco,pagina pag){
-       int i;
-       fseek(destino,endereco,SEEK_SET);
-       fprintf(destino,"%d ",pag.ap_pai);
-       for(i=0;i<9;i++) fprintf(destino,"%d %d", pag.n[i].valor,pag.n[i].end_noh);
-       for(i=0;i<10;i++) fprintf(destino," %d", pag.f[i]);       
+
+pagina new_page(){
+	int i;
+	pagina pag;
+	pag.ap_pai=-1;
+	for(i=0;i<9;i++){
+		pag.n[i]=new_node;
+		pag.f[i]=-1;
+	}
+	pag.f[9]=-1;
+	return pag;
 }
+
+void escreve_pag(FILE *f, long int ad, pagina pag){
+	int i;
+	
+	fwrite(&pag.ap_pai,sizeof(long int),1,f);
+	for(i=0;i<9;i++){
+		fprintf(f," ");
+		fwrite(&pag.n[i].valor,sizeof(int),1,f);
+		fprintf(f," ");
+		fwrite(&pag.n[i].end_noh,sizeof(long int),1,f);
+	}
+	for(i=0;i<10;i++){
+		fprintf(f," ");
+		fwrite(&pag.f[i],sizeof(long int),1,f);
+	}
+	fprintf(f,"\n");
+}
+
+pagina le_pag(FILE *f, long int ad){
+	int i;
+	pagina pag;
+	
+	fread(&pag.ap_pai,sizeof(long int),1,f);
+	fseek(f,1,SEEK_CUR);
+	for(i=0;i<9;i++){
+		fread(&pag.n[i].valor,sizeof(int),1,f);
+		fseek(f,1,SEEK_CUR);
+		fread(&pag.n[i].end_noh,sizeof(long int),1,f);
+		fseek(f,1,SEEK_CUR);
+	}
+	for(i=0;i<10;i++){
+		fread(&pag.f[i],sizeof(long int),1,f);
+		fseek(f,1,SEEK_CUR);
+	}
+	return pag;
+}
+
+
 int ftam(campos *campo,int n_campos){
     int tam = campo[n_campos-1].pf;
     return tam;
 }
-noh busca_noh(FILE *destino,noh reg,long int end,int ord){
+noh busca_noh(FILE *destino,noh reg,int end,int ord){
     noh res; res.valor = 0; res.end_noh = 0;  /*retorna o resultado da busca na pagina*/
     char c;
     if(c = fgetc(destino) == EOF) return res;
@@ -104,29 +145,4 @@ void grava_reg_desp(FILE *desprezados,char *reg_completo){
      int tam = strlen(reg_completo);
      fseek (desprezados, 0, SEEK_END);
      fwrite(reg_completo,sizeof(char),tam,desprezados);
-}
-
-void graph_tree(FILE *entrada, FILE *destino, int ord, long int root){
-     long int addr = 0;     /*addr será a variável do endereço do nó que representará este*/
-     pagina pag;           /*pagina que será lida linearmente do arquivo de entrada*/
-     int i = 0, nkey = 0;  /*Contador da órdem da árvore, e contador de quantas chaves uma página contém*/
-     fseek(entrada, 0, SEEK_SET);     /*Seta o arquivo entrada no seu início*/
-     
-     fprintf(destino, "RAÍZ: nó %ld\n", root);         /*informa qual é o nó raíz*/
-     while(!feof(entrada)){
-                addr = ftell(entrada);
-                pag = le_pag(entrada, addr);
-                fprintf(destino, "nó: %ld", addr);
-                for(i=0; i<ord;i++){
-                         if(pag.n[i].valor!=-1){  /*se a chave existir*/
-                                   fprintf(destino, "(%ld,%d);", pag.f[i], pag.n[i].valor);
-                                   nkey++;          /*incrementa o valor de chaves existentes*/
-                         }
-                }
-                if(nkey!=0){
-                         fprintf(destino, "(%ld)", pag.f[i]);
-                         fprintf(destino, "Total Chaves = %d\n", nkey);
-                         nkey = 0;
-                }
-     }
 }
