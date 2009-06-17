@@ -67,16 +67,8 @@ pagina le_pag(FILE *f, long int ad){
 /*Funcao acha espaco no final de arquivo, devolve endereco*/
 
 long int newpagespace(FILE *f){
-	long int n;
-	char a='\n';
 	fseek(f,0,SEEK_END);
-	while(a=='\n'){
-		fseek(f,-2,SEEK_CUR);
-		fscanf(f,"%c",&a);
-	}
-	fseek(f,1,SEEK_CUR);
-	n=ftell(f);
-	return n;
+	return ftell(f);
 }
 
 /*Funcão adiciona um noh em uma página, parametros
