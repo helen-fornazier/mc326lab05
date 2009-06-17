@@ -46,7 +46,7 @@ noh busca_noh(FILE *destino,noh reg,long int end,int ord);
   retorna 1, endereco do registro. Se a arvore estiver vazia, retorna 0,0 
   (endereco do primeiro noh na arvore)
 */
-void escreve_pag(FILE *destino,long int endereco,pagina pag);
+void escreve_pag(FILE *f,long int ad,pagina pag);
 /*
   escreve no encedereco "endereco" a pagina "pag"
 */   
@@ -63,7 +63,7 @@ noh le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos);
   le no arquivo de entrada o próximo registro, retirando sua chave e endereco.
   Alem disso, copia o registro na integra para o &reg_completo
 */
-pagina le_pag(FILE *destino,long int endereco);
+pagina le_pag(FILE *f,long int ad);
 /*
   le, do endereco "endereco" uma pagina e a retorna
 */
