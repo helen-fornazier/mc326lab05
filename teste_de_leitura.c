@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-    FILE *fpag = fopen ("pagina.txt", "r+");
+    FILE *fpag = fopen ("pagina.txt", "a");
     int ord = 3;
     pagina pag, pag2;
     
@@ -21,10 +21,10 @@ int main(int argc, char *argv[])
     
     pag2 = le_pag (fpag, 0);
     
-    printf("%d, %d\n", pag2.n[0], pag2.n[1]);
+    printf("%d, %d\n", pag2.n[0].valor, pag2.n[1].valor);
     
 
   
-  system("PAUSE");	
+ // system("PAUSE");	
   return 0;
 }
