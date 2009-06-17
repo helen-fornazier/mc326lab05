@@ -36,6 +36,11 @@ void adiciona_na_tree(FILE *destino,long int end_noh, noh reg,long int *raiz){
      /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 }
 
+/*Funcao acha espaco no final de arquivo, devolve endereco*/
+long int newpagespace(FILE *f){
+	fseek(f,0,SEEK_END);
+	return ftell(f);
+}
 
 pagina new_page(){
 	int i;
@@ -50,42 +55,28 @@ pagina new_page(){
 	return pag;
 }
 
-void escreve_pag(FILE *f, long int ad, pagina pag){
-	int i;
-	
-	fseek(f, ad, SEEK_SET);
-	fwrite(&(pag.ap_pai),sizeof(long int),1,f);
-	for(i=0;i<9;i++){
-		fprintf(f," ");
-		fwrite(&pag.n[i].valor,sizeof(int),1,f);
-		fprintf(f," ");
-		fwrite(&pag.n[i].end_noh,sizeof(long int),1,f);
-	}
-	for(i=0;i<10;i++){
-		fprintf(f," ");
-		fwrite(&pag.f[i],sizeof(long int),1,f);
-	}
-	fprintf(f,"\n");
+pagina le_pag(FILE *destino,long int endereco){
+       pagina pag;
+       int i;
+       fseek(destino,endereco,SEEK_SET);
+       fscanf(destino,"%ld", &pag.ap_pai);
+       for(i=0;i<9;i++){ 
+		   	fscanf(destino,"%d", &pag.n[i].valor);
+			fscanf(destino,"%ld",&pag.n[i].end_noh);
+	   }
+       for(i=0;i<10;i++) fscanf(destino,"%ld", &pag.f[i]);       
+       return pag;
 }
-
-pagina le_pag(FILE *f, long int ad){
-	int i;
-	pagina pag;
-	
-	fseek(f, ad, SEEK_SET);
-	fread(&pag.ap_pai,sizeof(long int),1,f);
-	fseek(f,1,SEEK_CUR);
-	for(i=0;i<9;i++){
-		fread(&pag.n[i].valor,sizeof(int),1,f);
-		fseek(f,1,SEEK_CUR);
-		fread(&pag.n[i].end_noh,sizeof(long int),1,f);
-		fseek(f,1,SEEK_CUR);
-	}
-	for(i=0;i<10;i++){
-		fread(&pag.f[i],sizeof(long int),1,f);
-		fseek(f,1,SEEK_CUR);
-	}
-	return pag;
+void escreve_pag(FILE *destino,long int endereco,pagina pag){
+       int i;
+       fseek(destino,endereco,SEEK_SET);
+       fprintf(destino,"%6ld ",pag.ap_pai);
+       for(i=0;i<9;i++){ 
+		   fprintf(destino,"%6d ",pag.n[i].valor);
+		   fprintf(destino,"%6ld ", pag.n[i].end_noh);
+	   }
+       for(i=0;i<10;i++) fprintf(destino,"%6ld ", pag.f[i]);       
+	   fprintf(destino, "\n");
 }
 
 

@@ -1,6 +1,7 @@
 #ifndef LIB_TREE
 #define LIB_TREE
 
+#define TAM_PAG 203			//Tamanho de uma linha no registro de indice/árvore
 #ifndef STRUCT_CAMPO
 #define STRUCT_CAMPO
 typedef struct campos {
@@ -26,6 +27,13 @@ typedef struct pagina{
         long int f[10];
 }pagina;
 
+pagina new_page();
+/*Devolve uma página com todos os seus valore inicializados com -1
+ * */
+
+long int newpagespace(FILE *f);
+/*Funcao acha espaco no final de arquivo, devolve endereco*/
+
 void adiciona_na_tree(FILE *destino,long int end_noh, noh reg,long int *raiz);
 /*
   adiciona no noh de endereco busc_noh.endereco o conjunto reg (chave+end do 
@@ -46,7 +54,7 @@ noh busca_noh(FILE *destino,noh reg,long int end,int ord);
   retorna 1, endereco do registro. Se a arvore estiver vazia, retorna 0,0 
   (endereco do primeiro noh na arvore)
 */
-void escreve_pag(FILE *f,long int ad,pagina pag);
+void escreve_pag(FILE *f,long int endereco,pagina pag);
 /*
   escreve no encedereco "endereco" a pagina "pag"
 */   
@@ -63,7 +71,7 @@ noh le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos);
   le no arquivo de entrada o próximo registro, retirando sua chave e endereco.
   Alem disso, copia o registro na integra para o &reg_completo
 */
-pagina le_pag(FILE *f,long int ad);
+pagina le_pag(FILE *f,long int endereco);
 /*
   le, do endereco "endereco" uma pagina e a retorna
 */
