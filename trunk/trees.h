@@ -34,7 +34,8 @@ pagina new_page();
 long int newpagespace(FILE *f);
 /*Funcao acha espaco no final de arquivo, devolve endereco*/
 
-void adiciona_na_tree(FILE *destino,long int end_noh, noh reg,long int *raiz);
+//void adiciona_na_tree(FILE *destino,long int end_noh, noh reg,long int *raiz);
+void adiciona_na_tree(FILE *f, long int *root, noh reg, int ord);
 /*
   adiciona no noh de endereco busc_noh.endereco o conjunto reg (chave+end do 
   registro no arq de entrada).
