@@ -7,7 +7,7 @@
 #include "save_arq.h"
 #include "read_arq.h"
 
-void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos,int ord){
+void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,long int ind_chave,campos *campo,int n_campos,int ord){
      /*no caso de construir a arvore*/
     noh busc_noh; 
     noh reg;
@@ -32,7 +32,7 @@ void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos
          fgetc(entrada);
          }         
 }
-void adiciona_na_tree(FILE *destino,int end_noh, noh reg,int *raiz){
+void adiciona_na_tree(FILE *destino,long int end_noh, noh reg,long int *raiz){
      /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 }
 pagina le_pag(FILE *destino,int endereco){
@@ -55,7 +55,7 @@ int ftam(campos *campo,int n_campos){
     int tam = campo[n_campos-1].pf;
     return tam;
 }
-noh busca_noh(FILE *destino,noh reg,int end,int ord){
+noh busca_noh(FILE *destino,noh reg,long int end,int ord){
     noh res; res.valor = 0; res.end_noh = 0;  /*retorna o resultado da busca na pagina*/
     char c;
     if(c = fgetc(destino) == EOF) return res;
@@ -104,4 +104,29 @@ void grava_reg_desp(FILE *desprezados,char *reg_completo){
      int tam = strlen(reg_completo);
      fseek (desprezados, 0, SEEK_END);
      fwrite(reg_completo,sizeof(char),tam,desprezados);
+}
+
+void graph_tree(FILE *entrada, FILE *destino, int ord, long int root){
+     long int addr = 0;     /*addr será a variável do endereço do nó que representará este*/
+     pagina pag;           /*pagina que será lida linearmente do arquivo de entrada*/
+     int i = 0, nkey = 0;  /*Contador da órdem da árvore, e contador de quantas chaves uma página contém*/
+     fseek(entrada, 0, SEEK_SET);     /*Seta o arquivo entrada no seu início*/
+     
+     fprintf(destino, "RAÍZ: nó %ld\n", root);         /*informa qual é o nó raíz*/
+     while(!feof(entrada)){
+                addr = ftell(entrada);
+                pag = le_pag(entrada, addr);
+                fprintf(destino, "nó: %ld", addr);
+                for(i=0; i<ord;i++){
+                         if(pag.n[i].valor!=-1){  /*se a chave existir*/
+                                   fprintf(destino, "(%ld,%d);", pag.f[i], pag.n[i].valor);
+                                   nkey++;          /*incrementa o valor de chaves existentes*/
+                         }
+                }
+                if(nkey!=0){
+                         fprintf(destino, "(%ld)", pag.f[i]);
+                         fprintf(destino, "Total Chaves = %d\n", nkey);
+                         nkey = 0;
+                }
+     }
 }
