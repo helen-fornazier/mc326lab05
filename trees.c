@@ -12,7 +12,7 @@ void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos
     noh busc_noh; 
     noh reg;
     int i=0;
-    int raiz=0;               /*possui o endereco da pagina raiz*/
+    long int raiz=0;               /*possui o endereco da pagina raiz*/
     char *reg_completo = malloc(sizeof(char)*ftam(campo,n_campos));
     fgetc(entrada);
     while(!feof(entrada)){
@@ -32,23 +32,18 @@ void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos
          fgetc(entrada);
          }         
 }
-void adiciona_na_tree(FILE *destino,int end_noh, noh reg,int *raiz){
+void adiciona_na_tree(FILE *destino,long int end_noh, noh reg,long int *raiz){
      /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 }
 
-noh new_node(){
-	noh node;
-	node.valor=-1;
-	node.end_noh=-1;
-	return node;
-}
 
 pagina new_page(){
 	int i;
 	pagina pag;
 	pag.ap_pai=-1;
 	for(i=0;i<9;i++){
-		pag.n[i]=new_node;
+		pag.n[i].valor=-1;
+		pag.n[i].end_noh=-1;
 		pag.f[i]=-1;
 	}
 	pag.f[9]=-1;
@@ -96,7 +91,7 @@ int ftam(campos *campo,int n_campos){
     int tam = campo[n_campos-1].pf;
     return tam;
 }
-noh busca_noh(FILE *destino,noh reg,int end,int ord){
+noh busca_noh(FILE *destino,noh reg,long int end,int ord){
     noh res; res.valor = 0; res.end_noh = 0;  /*retorna o resultado da busca na pagina*/
     char c;
     if(c = fgetc(destino) == EOF) return res;
