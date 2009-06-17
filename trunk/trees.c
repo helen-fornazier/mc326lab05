@@ -53,7 +53,8 @@ pagina new_page(){
 void escreve_pag(FILE *f, long int ad, pagina pag){
 	int i;
 	
-	fwrite(&pag.ap_pai,sizeof(long int),1,f);
+	fseek(f, ad, SEEK_SET);
+	fwrite(&(pag.ap_pai),sizeof(long int),1,f);
 	for(i=0;i<9;i++){
 		fprintf(f," ");
 		fwrite(&pag.n[i].valor,sizeof(int),1,f);
@@ -71,6 +72,7 @@ pagina le_pag(FILE *f, long int ad){
 	int i;
 	pagina pag;
 	
+	fseek(f, ad, SEEK_SET);
 	fread(&pag.ap_pai,sizeof(long int),1,f);
 	fseek(f,1,SEEK_CUR);
 	for(i=0;i<9;i++){
