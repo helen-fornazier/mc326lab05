@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     noh reg;
     int buscar;
     noh achou;
+	long int raiz = -1;
         
     /*Arquivo de erros*/
     fileptr = Fopen(ARQUIVO_DE_MENSAGENS,"r", vazio);
@@ -76,20 +77,32 @@ int main(int argc, char *argv[])
                          break;
                  case 1:
                          ind_chave = ret_indice_chave(campo,n_campos);
-                         pre_tree(entrada,destino,desprezados,ind_chave,campo,n_campos,ord);
+                         raiz = pre_tree(entrada,destino,desprezados,ind_chave,campo,n_campos,ord);
                          sucesso (mensagens);
-                         free (reg_completo);
                          break;
                  case 2:
+						 if(raiz==-1){printf("Opção 1 ainda não realizada\n"); break;}
                          reg.end_noh = 0;
                          printf ("Digite chave de busca (RA): ");
                          scanf ("%d", &reg.valor);
-                         achou = busca_noh(destino,reg,0,ord);
-                         printf("reg.valor = %d, reg.end_noh = %d\n", achou.valor, achou.end_noh);
+                         achou = busca_noh(destino,reg,raiz,ord);
+                         printf("reg.valor = %d, reg.end_noh = %ld\n", achou.valor, achou.end_noh);
+
+						 if(!achou.valor) {printf("A chave não foi encontrada\n");}
+						 else { 
+							 fseek(entrada, achou.end_noh, SEEK_SET);
+							 reg_completo = malloc(sizeof(char)*(ftam(campo,n_campos)+1));
+							 fread(reg_completo, sizeof(char), ftam(campo,n_campos)+1, entrada);
+							 reg_completo[ftam(campo,n_campos)]='\0';
+							 printf("Chave encontrada:\n%s\n", reg_completo);
+							 free(reg_completo);
+						 }
                           /*busca por chave = aplicar função utilizada dentro da construcao da arvore*/
                           break;
                  case 3:
                           /*desenhar a arvore*/
+						 if(raiz==-1){printf("Opção 1 ainda não realizada\n"); break;}
+						  graph_tree(destino,desc_tree,ord,raiz);
                           break;
                  default:
                           break;
