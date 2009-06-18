@@ -80,7 +80,7 @@ void add_node(FILE *f, long int *root, noh reg, int ord, long int ad, long int a
 		}
 		
 /* divide a página em duas e vê onde fica o novo nó */		
-		tempint=(ord/2)+1;
+		tempint=(ord/2);
 		newpag=new_page();
 		for(i=0,j=0;i<ord;i++){
 			if(reg.valor<pag.n[i].valor){
