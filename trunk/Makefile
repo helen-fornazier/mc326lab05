@@ -5,7 +5,7 @@ CLIB_OBJ = erro.o file.o read_arq.o save_arq.o trees.o
 CPROG = Btree.c
 CPROG_OBJ = Btree.o
 PROG = teste
-PARAMS = 5 listafinal1000.txt pagina.txt desprezados.txt descricao.txt
+PARAMS = 9 listafinal1000.txt pagina.txt desprezados.txt descricao.txt
 
 $(PROG): $(CLIB) $(CLIB_OBJ) $(CPROG) $(CPROG_OBJ)
 	$(CC) $(CFLAG) $(CLIB)

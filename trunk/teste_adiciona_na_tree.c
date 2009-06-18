@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
  	
 
 
-    pag.n[1].valor=91624;
+    pag.n[1].valor=991624;
     pag.n[0].valor=718472;
     pag.n[0].end_noh=-1;
     pag.n[1].end_noh=-1;
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     pag.f[2]=-1;
     pag.ap_pai=-1;
 
-    pag2.n[0].valor=61624;
+    pag2.n[0].valor=616249;
     pag2.n[1].valor=518472;
     pag2.n[0].end_noh=-1;
     pag2.n[1].end_noh=-1;
