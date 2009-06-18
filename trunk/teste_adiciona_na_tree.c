@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 	adiciona_na_tree(fpag, &root, pag.n[0], ord-1);
 	adiciona_na_tree(fpag, &root, pag.n[1], ord-1);
 	adiciona_na_tree(fpag, &root, pag2.n[0], ord-1);
-	adiciona_na_tree(fpag, &root, pag2.n[1], ord-1);
+//	adiciona_na_tree(fpag, &root, pag2.n[1], ord-1);
     
     //escreve_pag(fpag, 0, pag);
 	fseek(fpag, 0, SEEK_END);
