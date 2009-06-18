@@ -109,10 +109,11 @@ void add_node(FILE *f, long int *root, noh reg, int ord, long int ad, long int a
 				pag.f[i]=-1;
 			}
 		}
-		escreve_pag(f,ad,pag);
 		newpag.n[j]=reg;
 		newpag.f[j]=pag.f[i];
 		pag.f[i]=-1;	
+		escreve_pag(f,ad,pag);
+		newpag.f[j+1]=adright;
 		newpag.ap_pai=pag.ap_pai;
 	
 /* escreve o novo nó */
