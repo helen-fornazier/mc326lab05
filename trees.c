@@ -7,30 +7,33 @@
 #include "save_arq.h"
 #include "read_arq.h"
 
-void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos,int ord){
+/*Retorna a raíz*/
+long int pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos,int ord){
      /*no caso de construir a arvore*/
     noh busc_noh; 
     noh reg;
     int i=0;
     long int raiz=0;               /*possui o endereco da pagina raiz*/
-    char *reg_completo = malloc(sizeof(char)*ftam(campo,n_campos));
+    char *reg_completo = malloc(sizeof(char)*(ftam(campo,n_campos)+1));
     fgetc(entrada);
     while(!feof(entrada)){
             fseek(entrada,-1,SEEK_CUR); 
             reg = le_chave(entrada,reg_completo,campo,n_campos); 
-            printf("reg.valor = %d, reg.end_noh = %d, contador = %d\n",reg.valor, reg.end_noh, ++i);
+            //printf("reg.valor = %d, reg.end_noh = %ld, contador = %d\n",reg.valor, reg.end_noh, ++i);
             /*MIRIA E RUBENS: busca_noh*/  
             busc_noh = busca_noh(destino,reg,raiz,ord); 
-            printf("reg.valor = %d, reg.end_noh = %d\n", busc_noh.valor, busc_noh.end_noh);
+            //printf("reg.valor = %d, reg.end_noh = %ld\n", busc_noh.valor, busc_noh.end_noh);
             /*HELEN E PEDRO: adiciona_na_tree*/
-            if(busc_noh.valor == 0) adiciona_na_tree(destino,busc_noh.end_noh,reg,&raiz);
+            if(busc_noh.valor == 0) adiciona_na_tree(destino,&raiz,reg, ord-1);
                 
                  /*MIRIA E RUBENS: grava_reg_desp*/            
             else grava_reg_desp(desprezados,reg_completo);
                   /*grava o registro reg_completo no arquivo de desprezados*/
          
          fgetc(entrada);
-         }         
+         }
+	free(reg_completo);
+	return raiz;
 }
 
 /*Funcão adiciona um noh em uma página, parametros
@@ -46,7 +49,7 @@ void add_node(FILE *f, long int *root, noh reg, int ord, long int ad, long int a
 	pag = new_page();
 	noh tempnoh, tempnoh2;
 	int i, j, tempint=0;
-	long int templint, templint2;
+	long int templint;
 	
 	pag=le_pag(f,ad);
 	for(i=0;i<ord;i++)
@@ -134,7 +137,7 @@ void add_node(FILE *f, long int *root, noh reg, int ord, long int ad, long int a
 void adiciona_na_tree(FILE *f, long int *root, noh reg, int ord){
 	noh temp;
 
-	temp=busca_noh(f,reg,*root,ord);
+	temp=busca_noh(f,reg,*root,ord+1);
 	if(temp.valor) return;
 
 	add_node(f,root,reg,ord,temp.end_noh,-1);
@@ -162,6 +165,7 @@ pagina new_page(){
 
 pagina le_pag(FILE *destino,long int endereco){
        pagina pag;
+	   pag = new_page();
        int i;
        fseek(destino,endereco,SEEK_SET);
        fscanf(destino,"%ld", &pag.ap_pai);
@@ -202,23 +206,25 @@ noh busca_noh(FILE *destino,noh reg,long int end,int ord){
 }
 
 noh busca_na_pag(pagina pag,noh reg,int ord){
-    int i;
+    int i = 0, nkey = 0;
     noh ret;
     for(i=0;i<ord-1;i++) {
        if(reg.valor == pag.n[i].valor) 
          {ret.valor = 1; ret.end_noh = pag.n[i].end_noh; return ret;}
        if(reg.valor < pag.n[i].valor) 
          {ret.valor = 0; ret.end_noh = pag.f[i]; return ret;}
+	   if (pag.n[i].valor!=-1){	   nkey++;}
     }
-    ret.valor = 0; ret.end_noh = pag.f[ord]; return ret; 
+    ret.valor = 0; ret.end_noh = pag.f[nkey]; return ret; 
 }
+
 noh le_chave(FILE *entrada, char *reg_completo, campos *campo, int n_campos){
     noh novos_dados;
     int tam = ftam(campo,n_campos);
     int ind = ret_indice_chave(campo,n_campos);
     int chave_tam = campo[ind-1].pf - campo[ind-1].pi;
     char *chave = (char*) malloc (sizeof(char)*(chave_tam+1));
-    reg_completo = (char*)malloc((sizeof(char))*(tam + 1));
+    //reg_completo = (char*)malloc((sizeof(char))*(tam + 1));   não precisa malocar, pois já é mallocado fora, e aqui não é alterado fora da função
     /*gravação do valor do inicio do registro na variável a ser retornada*/
     novos_dados.end_noh = ftell (entrada);
     /*gravação do valor da chave na variável a ser retornada*/
@@ -240,3 +246,33 @@ void grava_reg_desp(FILE *desprezados,char *reg_completo){
      fseek (desprezados, 0, SEEK_END);
      fwrite(reg_completo,sizeof(char),tam,desprezados);
 }
+
+void graph_tree(FILE *entrada, FILE *destino, int ord, long int root){
+     fseek(entrada, 0, SEEK_SET);     /*Seta o arquivo entrada no seu início*/
+     
+	 long int addr = 0;     /*addr será a variável do endereço do nó que representará este*/
+     pagina pag, pag2;           /*pagina que será lida linearmente do arquivo de entrada*/
+     int i = 0, nkey = 0;  /*Contador da órdem da árvore, e contador de quantas chaves uma página contém*/
+     
+     fprintf(destino, "RAÍZ: nó %6ld\n", root);         /*informa qual é o nó raíz*/
+	 pag = le_pag (entrada, addr);
+     while(!feof(entrada)){
+                fprintf(destino, "nó: %6ld\t", addr);
+                for(i=0; i<ord-1;i++){
+                         if(pag.n[i].valor!=-1){  /*se a chave existir*/
+                                   fprintf(destino, "(%ld,%d),", pag.f[i], pag.n[i].valor);
+                                   nkey++;          /*incrementa o valor de chaves existentes*/
+                         }
+                }
+                if(nkey!=0){
+                         fprintf(destino, "(%ld)\t", pag.f[nkey]);
+                         fprintf(destino, "Total Chaves = %d\t Nó Pai: %ld\n", nkey, pag.ap_pai);
+                         nkey = 0;
+                }
+                addr=addr+1+TAM_PAG;
+                pag2 = le_pag(entrada, addr);
+				if(pag2.n[0].valor == pag.n[0].valor) break;
+				pag = pag2;
+     }
+}
+

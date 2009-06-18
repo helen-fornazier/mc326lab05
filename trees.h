@@ -76,9 +76,10 @@ pagina le_pag(FILE *f,long int endereco);
 /*
   le, do endereco "endereco" uma pagina e a retorna
 */
-void pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos,int ord);
+long int pre_tree(FILE *entrada,FILE *destino,FILE *desprezados,int ind_chave,campos *campo,int n_campos,int ord);
 /*
   eh dentro desta funcao que chamaremos a busca pelo noh e, depois a adiciona_na_tree
+  Retorna o endereço da raiz
 */
 void graph_tree(FILE *entrada, FILE *destino, int ord, long int root);
 /*
